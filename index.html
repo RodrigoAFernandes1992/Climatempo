@@ -8,16 +8,14 @@
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
 <body>
-  <!-- Barra superior -->
   <header class="topbar">
     <div class="logo">CLIMA<span>+</span></div>
   </header>
 
-  <!-- Dashboard -->
   <main class="dashboard">
-    <!-- Linha do clima -->
     <div class="clima-row">
       <div class="weather-card">
         <div class="weather-info">
@@ -25,11 +23,9 @@
             <h2>Bebedouro, SP</h2>
             <p>🌤 Sol com muitas nuvens</p>
           </div>
-
           <div class="weather-item">
-            <h1>--°</h1> <!-- Será atualizado pelo JS -->
+            <h1>--°</h1>
           </div>
-
           <div class="weather-item details">
             <p>Última leitura do sistema</p>
           </div>
@@ -37,37 +33,122 @@
       </div>
     </div>
 
-    <!-- Gráficos -->
     <div class="graficos-row">
       <div class="chart-card">
         <h3>Probabilidade de Chuva (%)</h3>
         <canvas id="graficoChuva"></canvas>
       </div>
-
       <div class="chart-card">
         <h3>Temperatura (°C)</h3>
         <canvas id="graficoTemperatura"></canvas>
       </div>
-
       <div class="chart-card">
         <h3>Pressão Atmosférica (hPa)</h3>
         <canvas id="graficoPressao"></canvas>
       </div>
     </div>
 
-    <!-- Sobre o projeto -->
     <section class="about-project">
       <h3>Sobre o Projeto</h3>
       <p>
-        O <strong>Clima+</strong> foi desenvolvido pela Escola SESI CE 110, pelos alunos do 3º ano do Ensino Médio,
-        com o objetivo de fornecer informações sobre <strong>probabilidade de chuva</strong>,
-        <strong>pressão</strong> e <strong>temperatura</strong> de forma clara e acessível para a comunidade.
+        O <strong>Clima+</strong> foi desenvolvido pela Escola SESI CE 110, pelos alunos do 3º ano do Ensino Médio, com o objetivo de fornecer informações sobre <strong>probabilidade de chuva</strong>, <strong>pressão</strong> e <strong>temperatura</strong> de forma clara e acessível para a comunidade.
       </p>
     </section>
   </main>
 
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="./script.js"></script>
+  <script>
+    const SUPABASE_URL = "https://unmnfifouemowyrkdjdj.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVubW5maWZvdWVtb3d5cmtkamRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0MjI4MDcsImV4cCI6MjA3Mjk5ODgwN30.AZAm7yidblij9Wqm-wRbM8qUmFSq8YoWSrlHiJSKDu8";
+
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function carregarClima() {
+      try {
+        const { data, error } = await supabase
+          .from("sensores")
+          .select("*")
+          .order("id_sensores", { ascending: false })
+          .limit(5);
+
+        if (error) {
+          console.error("Erro Supabase:", error);
+          return;
+        }
+
+        if (!data || data.length === 0) {
+          console.log("Nenhum dado disponível na tabela.");
+          return;
+        }
+
+        const ultimoClima = data[0];
+
+        // Atualiza temperatura principal
+        const tempEl = document.querySelector(".weather-item h1");
+        if (tempEl) tempEl.textContent = (ultimoClima.temperatura ?? "--") + "°";
+
+        // Atualiza detalhes
+        const detailsEl = document.querySelector(".weather-item.details");
+        if (detailsEl) {
+          detailsEl.innerHTML = `
+            <p>Última leitura do sistema</p>
+            <p>Pressão: <span>${ultimoClima.pressao ?? "--"} hPa</span></p>
+          `;
+        }
+
+        // Atualiza gráficos
+        atualizarGraficos(data.reverse());
+      } catch (err) {
+        console.error("Erro ao carregar clima:", err);
+      }
+    }
+
+    function atualizarGraficos(dados) {
+      const labels = dados.map((_, i) => `#${i + 1}`);
+      const chuva = dados.map(d => d.chuva ?? 0);
+      const temp = dados.map(d => d.temperatura ?? 0);
+      const pressao = dados.map(d => d.pressao ?? 0);
+
+      // Gráfico de chuva
+      const ctxChuva = document.getElementById("graficoChuva");
+      if (ctxChuva) {
+        new Chart(ctxChuva, {
+          type: "bar",
+          data: {
+            labels,
+            datasets: [{ label: "Chuva (%)", data: chuva, backgroundColor: "#4a90e2" }],
+          },
+        });
+      }
+
+      // Gráfico de temperatura
+      const ctxTemp = document.getElementById("graficoTemperatura");
+      if (ctxTemp) {
+        new Chart(ctxTemp, {
+          type: "line",
+          data: {
+            labels,
+            datasets: [{ label: "Temperatura (°C)", data: temp, borderColor: "#ff5733", fill: false }],
+          },
+        });
+      }
+
+      // Gráfico de pressão
+      const ctxPressao = document.getElementById("graficoPressao");
+      if (ctxPressao) {
+        new Chart(ctxPressao, {
+          type: "line",
+          data: {
+            labels,
+            datasets: [{ label: "Pressão (hPa)", data: pressao, borderColor: "#33c1ff", fill: false }],
+          },
+        });
+      }
+    }
+
+    // Carrega ao abrir a página
+    carregarClima();
+    // Atualiza a cada 60s
+    setInterval(carregarClima, 60000);
+  </script>
 </body>
 </html>
