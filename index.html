@@ -59,7 +59,6 @@
   <script>
     const SUPABASE_URL = "https://unmnfifouemowyrkdjdj.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVubW5maWZvdWVtb3d5cmtkamRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0MjI4MDcsImV4cCI6MjA3Mjk5ODgwN30.AZAm7yidblij9Wqm-wRbM8qUmFSq8YoWSrlHiJSKDu8";
-
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     async function carregarClima() {
@@ -104,7 +103,13 @@
 
     function atualizarGraficos(dados) {
       const labels = dados.map((_, i) => `#${i + 1}`);
-      const chuva = dados.map(d => d.chuva ?? 0);
+
+      // Converte valores de chuva: 4095 = 0%, 0 = 100%
+      const chuva = dados.map(d => {
+        const valor = d.chuva ?? 0;
+        return Math.round(((4095 - valor) / 4095) * 100);
+      });
+
       const temp = dados.map(d => d.temperatura ?? 0);
       const pressao = dados.map(d => d.pressao ?? 0);
 
@@ -112,11 +117,16 @@
       const ctxChuva = document.getElementById("graficoChuva");
       if (ctxChuva) {
         new Chart(ctxChuva, {
-          type: "bar",
+          type: "line",
           data: {
             labels,
             datasets: [{ label: "Chuva (%)", data: chuva, backgroundColor: "#4a90e2" }],
           },
+          options: {
+            scales: {
+              y: { beginAtZero: true, max: 100 }
+            }
+          }
         });
       }
 
