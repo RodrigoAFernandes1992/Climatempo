@@ -1,22 +1,19 @@
-dd;
-
 // Substitua pelos dados do seu projeto
-const SUPABASE_URL =
-  "https://unmnfifouemowyrkdjdj.supabase.co/rest/v1/sensores";
+const SUPABASE_URL = "https://unmnfifouemowyrkdjdj.supabase.co";
 const SUPABASE_ANON_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVubW5maWZvdWVtb3d5cmtkamRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0MjI4MDcsImV4cCI6MjA3Mjk5ODgwN30.AZAm7yidblij9Wqm-wRbM8qUmFSq8YoWSrlHiJSKDu8";
 
 // Cria cliente Supabase
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 async function carregarClima() {
   try {
     // pega o registro mais recente
     const { data, error } = await supabase
-      .from("clima")
-      .select("*")
-      .order("id", { ascending: false })
-      .limit(1);
+  .from("sensores")  // <-- tabela correta
+  .select("*")
+  .order("id", { ascending: false })
+  .limit(1);
 
     if (error) {
       console.error("Erro Supabase:", error);
@@ -37,9 +34,9 @@ async function carregarClima() {
     const detailsEl = document.querySelector(".weather-item.details");
     if (detailsEl) {
       detailsEl.innerHTML = `
-          <p>Última leitura do sistema</p>
-          <p>Pressão: <span>${clima.pressao ?? "--"} hPa</span></p>
-        `;
+        <p>Última leitura do sistema</p>
+        <p>Pressão: <span>${clima.pressao ?? "--"} hPa</span></p>
+      `;
     }
 
     // Atualiza gráficos
@@ -105,5 +102,5 @@ function atualizarGraficos(clima) {
 // Carrega ao abrir a página
 carregarClima();
 
-// Opcional: atualizar a cada 60s (descomente se quiser auto-refresh)
-// setInterval(carregarClima, 60000);
+// Atualiza a cada 60s (opcional)
+setInterval(carregarClima, 60000);

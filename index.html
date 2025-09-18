@@ -28,17 +28,16 @@
             </div>
 
             <div class="weather-item">
-              <h1>22°</h1>
+              <h1>--°</h1> <!-- Será atualizado pelo JS -->
             </div>
 
             <div class="weather-item details">
-              <p>Sensação: <span>22°</span></p>
-              <p>Vento: <span>4 km/h</span></p>
-              <p>Umidade: <span>52%</span></p>
+              <p>Última leitura do sistema</p>
             </div>
           </div>
         </div>
       </div>
+
       <div class="graficos-row">
         <div class="chart-card">
           <h3>Probabilidade de Chuva (%)</h3>
@@ -56,6 +55,7 @@
           <canvas id="graficoPressao"></canvas>
         </div>
       </div>
+
       <!-- Quadro informativo -->
       <section class="about-project">
         <h3>Sobre o Projeto</h3>
@@ -64,14 +64,14 @@
           <strong>Escola SESI CE 110</strong>, pelos alunos do
           <strong>3º ano do Ensino Médio</strong>, com o objetivo de fornecer
           informações sobre <strong>probabilidade de chuva</strong>,
-          <strong>umidade</strong> e <strong>temperatura</strong> de forma clara
+          <strong>pressão</strong> e <strong>temperatura</strong> de forma clara
           e acessível para a comunidade.
         </p>
         <p>
           Este trabalho foi realizado no âmbito do
           <strong>Curso Técnico Integrado em Desenvolvimento de Sistemas</strong
-          >, oferecido pelo <strong>SENAI</strong>, onde os estudantes Junto com
-          o professores Rodrigo Antonio Fernandes, e Bruno Eduardo Medeiros
+          >, oferecido pelo <strong>SENAI</strong>, onde os estudantes, junto
+          com os professores Rodrigo Antonio Fernandes e Bruno Eduardo Medeiros,
           foram responsáveis pela concepção do site, desenvolvimento dos
           gráficos e integração das informações, unindo teoria e prática em um
           projeto aplicado.
@@ -79,6 +79,7 @@
       </section>
     </main>
 
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="./script.js"></script>
   </body>
