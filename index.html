@@ -1,86 +1,73 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Clima Agora</title>
-    <link rel="stylesheet" href="style.css" />
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Plugin para mostrar números nos gráficos -->
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
-  </head>
-  <body>
-    <!-- Barra superior -->
-    <header class="topbar">
-      <div class="logo">CLIMA<span>+</span></div>
-    </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clima Agora</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+</head>
+<body>
+  <!-- Barra superior -->
+  <header class="topbar">
+    <div class="logo">CLIMA<span>+</span></div>
+  </header>
 
-    <!-- Dashboard -->
-    <main class="dashboard">
-      <!-- Linha do clima -->
-      <div class="clima-row">
-        <div class="weather-card">
-          <div class="weather-info">
-            <div class="weather-item">
-              <h2>Bebedouro, SP</h2>
-              <p>🌤 Sol com muitas nuvens</p>
-            </div>
+  <!-- Dashboard -->
+  <main class="dashboard">
+    <!-- Linha do clima -->
+    <div class="clima-row">
+      <div class="weather-card">
+        <div class="weather-info">
+          <div class="weather-item">
+            <h2>Bebedouro, SP</h2>
+            <p>🌤 Sol com muitas nuvens</p>
+          </div>
 
-            <div class="weather-item">
-              <h1>--°</h1> <!-- Será atualizado pelo JS -->
-            </div>
+          <div class="weather-item">
+            <h1>--°</h1> <!-- Será atualizado pelo JS -->
+          </div>
 
-            <div class="weather-item details">
-              <p>Última leitura do sistema</p>
-            </div>
+          <div class="weather-item details">
+            <p>Última leitura do sistema</p>
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="graficos-row">
-        <div class="chart-card">
-          <h3>Probabilidade de Chuva (%)</h3>
-          <canvas id="graficoChuva"></canvas>
-        </div>
-
-        <div class="chart-card">
-          <h3>Temperatura Próximas Semanas (°C)</h3>
-          <canvas id="graficoTemperatura"></canvas>
-        </div>
-
-        <!-- NOVO: gráfico de pressão -->
-        <div class="chart-card">
-          <h3>Pressão Atmosférica (hPa)</h3>
-          <canvas id="graficoPressao"></canvas>
-        </div>
+    <!-- Gráficos -->
+    <div class="graficos-row">
+      <div class="chart-card">
+        <h3>Probabilidade de Chuva (%)</h3>
+        <canvas id="graficoChuva"></canvas>
       </div>
 
-      <!-- Quadro informativo -->
-      <section class="about-project">
-        <h3>Sobre o Projeto</h3>
-        <p>
-          O <strong>Clima+</strong> foi desenvolvido pela
-          <strong>Escola SESI CE 110</strong>, pelos alunos do
-          <strong>3º ano do Ensino Médio</strong>, com o objetivo de fornecer
-          informações sobre <strong>probabilidade de chuva</strong>,
-          <strong>pressão</strong> e <strong>temperatura</strong> de forma clara
-          e acessível para a comunidade.
-        </p>
-        <p>
-          Este trabalho foi realizado no âmbito do
-          <strong>Curso Técnico Integrado em Desenvolvimento de Sistemas</strong
-          >, oferecido pelo <strong>SENAI</strong>, onde os estudantes, junto
-          com os professores Rodrigo Antonio Fernandes e Bruno Eduardo Medeiros,
-          foram responsáveis pela concepção do site, desenvolvimento dos
-          gráficos e integração das informações, unindo teoria e prática em um
-          projeto aplicado.
-        </p>
-      </section>
-    </main>
+      <div class="chart-card">
+        <h3>Temperatura (°C)</h3>
+        <canvas id="graficoTemperatura"></canvas>
+      </div>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-    <script src="./script.js"></script>
-  </body>
+      <div class="chart-card">
+        <h3>Pressão Atmosférica (hPa)</h3>
+        <canvas id="graficoPressao"></canvas>
+      </div>
+    </div>
+
+    <!-- Sobre o projeto -->
+    <section class="about-project">
+      <h3>Sobre o Projeto</h3>
+      <p>
+        O <strong>Clima+</strong> foi desenvolvido pela Escola SESI CE 110, pelos alunos do 3º ano do Ensino Médio,
+        com o objetivo de fornecer informações sobre <strong>probabilidade de chuva</strong>,
+        <strong>pressão</strong> e <strong>temperatura</strong> de forma clara e acessível para a comunidade.
+      </p>
+    </section>
+  </main>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="./script.js"></script>
+</body>
 </html>
